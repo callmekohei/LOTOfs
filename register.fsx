@@ -25,11 +25,20 @@ open System.Collections.Concurrent
 
 module Register =
 
+    type LOTO  = Loto6 | Loto7
+    type Loto  = { number: int ; lst:int list ; kind: LOTO }
+    let  loto6 = { number = 6 ; lst = [1..43] ; kind = Loto6 }
+    let  loto7 = { number = 7 ; lst = [1..37] ; kind = Loto7 }
+
     let db:SQ3 = sqlite.Database.SQ3( sqlite_connection ) 
 
     /// データーベースに登録するための当選情報の文字列を作成する関数 
-    let atariList atariData : string list =
-        let str = @"INSERT INTO loto6 ( id, date, n1, n2, n3, n4, n5, n6 ) VALUES ("
+    let atariList (loto:Loto) atariData  : string list =
+
+        let str = match loto.kind with
+                    | Loto6 -> @"INSERT INTO loto6 ( id, date, n1, n2, n3, n4, n5, n6 )     VALUES (" 
+                    | Loto7 -> @"INSERT INTO loto7 ( id, date, n1, n2, n3, n4, n5, n6, n7 ) VALUES ("
+
         atariData
         |> List.map( fun l -> l |> List.fold ( fun acc s -> acc + "," + "'" + s + "'" |> fun s -> s.TrimStart(',') ) "" )
         |> List.map( fun s -> str + s + ")" )
@@ -41,11 +50,13 @@ module Register =
         db.sqlite_close
 
     /// 最新のid をデーターベースから取得する関数
-    let lastID_sqlite (db:SQ3) : int =
+    let lastID_sqlite (db:SQ3) (loto:Loto) : int =
 
         let cq = new ConcurrentQueue<_>()
 
-        let str = @"SELECT id FROM loto6"
+        let str = match loto.kind with
+                    | Loto6 -> @"SELECT id FROM loto6"
+                    | Loto7 -> @"SELECT id FROM loto7"
 
         let f = fun (r:SQLiteDataReader) -> 
             cq.Enqueue ( r.GetInt32(0) ) |> ignore
@@ -61,41 +72,71 @@ module Register =
             else Array.max arr
 
     /// 最新の抽選回数をwebから取得する関数
-    let lastID_mizuho : int =
-        Atari loto6_head
+    let lastID_mizuho (loto:Loto) : int =
+
+        Atari ( match loto.kind with Loto6 -> loto6_head | Loto7 -> loto7_head )
         |> List.head
         |> List.head
         |> int
 
     /// 不足している当選情報リストをデーターベースに追加する
-    let doRegister () :unit =
-        let short = lastID_mizuho - lastID_sqlite db
+    let doRegister (loto:Loto) :unit =
+        let short = lastID_mizuho loto - lastID_sqlite db loto
         match short with
         | _ when short <  0   -> failwith "error!"
         | _ when short =  0   -> ()
         | _ when short <= 5   ->
-            ( atariList (Atari loto6_head) )
-            |> List.rev
-            |> List.take short
-            |> List.rev
-            |> register db
+            if loto.kind = Loto6
+            then 
+                ( atariList loto (Atari loto6_head) )
+                |> List.rev
+                |> List.take short
+                |> List.rev
+                |> register db
+            else 
+                ( atariList loto (Atari loto7_head) )
+                |> List.rev
+                |> List.take short
+                |> List.rev
+                |> register db
         | _ when short <= 100 ->
-            let body = atariList (Atari loto6_body |> List.rev)
-            let head = atariList (Atari loto6_head |> List.rev)
-            ( body @ head )
-            |> List.rev
-            |> List.take short
-            |> List.rev
-            |> register db
+            if loto.kind = Loto6
+            then 
+                let body = atariList loto (Atari loto6_body |> List.rev)
+                let head = atariList loto (Atari loto6_head |> List.rev)
+                ( body @ head )
+                |> List.rev
+                |> List.take short
+                |> List.rev
+                |> register db
+            else 
+                let body = atariList loto (Atari loto7_body |> List.rev)
+                let head = atariList loto (Atari loto7_head |> List.rev)
+                ( body @ head )
+                |> List.rev
+                |> List.take short
+                |> List.rev
+                |> register db
         | _ ->
-            let foot = atariList (Atari loto6_foot)
-            let body = atariList (Atari loto6_body |> List.rev)
-            let head = atariList (Atari loto6_head |> List.rev)
-            ( foot @ body @ head )
-            |> List.rev
-            |> List.take short
-            |> List.rev
-            |> register db
+            if loto.kind = Loto6
+            then          
+                let foot = atariList loto (Atari loto6_foot)
+                let body = atariList loto (Atari loto6_body |> List.rev)
+                let head = atariList loto (Atari loto6_head |> List.rev)
+                ( foot @ body @ head )
+                |> List.rev
+                |> List.take short
+                |> List.rev
+                |> register db
+            else
+                let foot = atariList loto (Atari loto7_foot)
+                let body = atariList loto (Atari loto7_body |> List.rev)
+                let head = atariList loto (Atari loto7_head |> List.rev)
+                ( foot @ body @ head )
+                |> List.rev
+                |> List.take short
+                |> List.rev
+                |> register db
 
 
 

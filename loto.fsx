@@ -75,41 +75,49 @@ module Util =
 
 module Main =
     open Util
-
-    /// (STEP0) データーベースに当選番号情報を登録する
-    register.Register.doRegister()
-    
-    /// (STEP1) 各スロットごとの数字をリストにまとめる
-
-    let cq = new ConcurrentQueue<int list>()
-            
-    let s = @"SELECT * FROM loto6"
-
-    let f2 = fun (r:SQLiteDataReader) -> 
-        [2..7]
-        |> List.map( fun n -> r.GetInt32(n) )
-        |> fun l -> cq.Enqueue l
-        |> ignore
-    
-    let data =    
-        let db = register.Register.db
-        db.sqlite_open
-        db.sqlite_select s f2
-        db.sqlite_close
-        cq.ToArray() |> Array.toList |> swapRowColumn
-
-    
-    /// (STEP2) 各ゾーンの個数にもとづいて予測する
     
     let idea04 (loto:Loto) (n:int) =
 
+        /// (STEP0) データーベースに当選番号情報を登録する
+        register.Register.doRegister( match loto.kind with Loto6 -> Register.loto6 | Loto7 -> Register.loto7 )
+
+        /// (STEP1) 各スロットごとの数字をリストにまとめる        
+        let data (loto:Loto) =
+            
+            let col = match loto.kind with Loto6 -> [2..7] | Loto7 -> [2..8]
+            let s   = match loto.kind with Loto6 -> @"SELECT * FROM loto6" | Loto7 -> @"SELECT * FROM loto7"
+
+            let cq = new ConcurrentQueue<int list>()
+
+            let f col = fun (r:SQLiteDataReader) -> 
+                col
+                |> List.map( fun n -> r.GetInt32(n) )
+                |> fun l -> cq.Enqueue l
+                |> ignore
+            
+            let db = register.Register.db
+            db.sqlite_open
+            db.sqlite_select s (f col)
+            db.sqlite_close
+            cq.ToArray() |> Array.toList |> swapRowColumn
+
+        /// (STEP2) 各ゾーンの個数にもとづいて予測する
         let zone = createZone loto
 
-        Seq.initInfinite (fun _ -> createAscendantRandomList data )
+        Seq.initInfinite (fun _ -> createAscendantRandomList (data loto ) )
         |> Seq.filter (fun l -> toZone loto l = zone )
         |> Seq.distinct
         |> Seq.take n
 
-    idea04 loto6 5
-    |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
-    |> stdout.WriteLine
+
+    [<EntryPointAttribute>]
+    let main argv =
+        let v:Loto = if    Array.isEmpty argv || argv.[0] <> "7"
+                     then  loto6
+                     else  loto7
+        
+        idea04 v 5
+        |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
+        |> stdout.WriteLine
+
+        0

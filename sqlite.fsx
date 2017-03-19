@@ -6,7 +6,7 @@ open System.Runtime.InteropServices
 module Database =
 
     /// Path to libSQLite.Interop.dylib
-    [<DllImport(@"/Users/kohei/Documents/lotofs/libSQLite.Interop.dylib" , CallingConvention = CallingConvention.Cdecl)>] 
+    [<DllImport(@"./libSQLite.Interop.dylib" , CallingConvention = CallingConvention.Cdecl)>] 
     let sqlite_connection : System.Data.SQLite.SQLiteConnection  =
         /// Path to sqlite3
         ( new SQLiteConnection( @"Data Source=./loto.sqlite3;Version=3;foreign keys=true" ))
