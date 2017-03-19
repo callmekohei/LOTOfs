@@ -29,3 +29,6 @@ exeと同じ階層に libSQLite.Interop.dylib, sqliteデーターベースファ
 ### See also
 
 http://callmekohei00.hatenablog.com/entry/2017/03/19/091654
+
+### LICENCE
+The MIT License (MIT)
