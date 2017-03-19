@@ -25,3 +25,7 @@ fscで実行
 
 exeと同じ階層に libSQLite.Interop.dylib, sqliteデーターベースファイルが必要
 ```
+
+### See also
+
+http://callmekohei00.hatenablog.com/entry/2017/03/19/091654
