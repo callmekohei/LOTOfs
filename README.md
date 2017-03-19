@@ -1,4 +1,4 @@
-###Summary
+### Summary
 ```text
 F#からSqliteを利用する
 
@@ -7,7 +7,7 @@ F#からSqliteを利用する
 ロト６を当てる！？
 ```
 
-###MacOSXでF#からSqliteを利用する方法
+### MacOSXでF#からSqliteを利用する方法
 ```
 System.Data.SQLiteをnugetする
 
@@ -20,7 +20,7 @@ FSharpコード内でDLLImportする
 
 
 
-###Sqlite table のつくりかた
+### Sqlite table のつくりかた
 ```bash
 // データーベースファイル loto.sqlite3 をつくる
 $ sqlite3 loto.sqlite3
@@ -35,7 +35,7 @@ sqlite> .table
 sqlite> .exit
 ```
 
-###実行するときは
+### 実行するときは
 ```
 fscで実行
 
