@@ -1,12 +1,16 @@
 !.gitignore
 !README.md
-!loto.fsx
-!sqlite.fsx
-!loto.sqlite3
-!.paket/
-!paket
 bin/
+!libSQLite.Interop.dylib
+!loto.fsx
+!loto.sqlite3
+!mizuho.fsx
 packages/
+!paket.dependencies
+!paket.lock
+!register.fsx
+!sqlite.fsx
+!.paket/
 
 ### https://raw.github.com/github/gitignore/0f88fa75def7ed7d96935b8630793e51953df9b0/Global/macos.gitignore
 

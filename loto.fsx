@@ -1,8 +1,22 @@
+// ===========================================================================
+//  FILE    : loto.fsx
+//  AUTHOR  : callmekohei <callmekohei at gmail.com>
+//  License : MIT license
+// ===========================================================================
+
+/// 当たるも八卦当たらぬも八卦
+
+
 #load @"./sqlite.fsx"
 open sqlite.Database
 
+#load @"./register.fsx"
+open register
+
 #r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
 open System.Data.SQLite
+
+#r @"./packages/FSharp.Data/lib/portable-net45+sl50+netcore45/FSharp.Data.dll"
 
 open System.Collections.Concurrent
 
@@ -57,8 +71,13 @@ module Util =
         |> String.concat separater
 
 
+
+
 module Main =
     open Util
+
+    /// (STEP0) データーベースに当選番号情報を登録する
+    register.Register.doRegister()
     
     /// (STEP1) 各スロットごとの数字をリストにまとめる
 
@@ -68,14 +87,15 @@ module Main =
 
     let f2 = fun (r:SQLiteDataReader) -> 
         [2..7]
-        |> List.map( fun n -> int ( r.GetString(n) ) )
+        |> List.map( fun n -> r.GetInt32(n) )
         |> fun l -> cq.Enqueue l
         |> ignore
     
     let data =    
-        let db = SQ3( sqlite_connection )
+        let db = register.Register.db
         db.sqlite_open
-        db.sqlite_select s f2 
+        db.sqlite_select s f2
+        db.sqlite_close
         cq.ToArray() |> Array.toList |> swapRowColumn
 
     

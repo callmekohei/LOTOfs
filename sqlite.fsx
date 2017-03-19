@@ -15,8 +15,11 @@ module Database =
 
         let cn = connection
 
-        member theis.sqlite_open : unit =
+        member this.sqlite_open : unit =
             cn.Open()
+        
+        member this.sqlite_close : unit =
+            cn.Close()
 
         member this.sqlite_createTable sql  =
             ( new SQLiteCommand(sql, cn)).ExecuteNonQuery() |> ignore

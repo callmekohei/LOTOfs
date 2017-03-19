@@ -1,38 +1,22 @@
 ### Summary
 ```text
-F#からSqliteを利用する
-
 ホームページからデーターを取得する
+
+F#からSqliteを利用する
 
 ロト６を当てる！？
 ```
 
-### MacOSXでF#からSqliteを利用する方法
+### file
 ```
-System.Data.SQLiteをnugetする
-
-libSQLite.Interop.dylibをコンパイルする
-
-FSharpコード内でDLLImportする
-```
-
-参照: http://callmekohei00.hatenablog.com/entry/2017/02/18/084909
-
-
-
-### Sqlite table のつくりかた
-```bash
-// データーベースファイル loto.sqlite3 をつくる
-$ sqlite3 loto.sqlite3
-
-// テーブルをつくる
-sqlite> create table loto6 ( id, date, n1, n2, n3, n4, n5, n6 );
-
-// テーブルの確認
-sqlite> .table
-
-// exit
-sqlite> .exit
+.
+├── README.md                   // このファイル
+├── libSQLite.Interop.dylib     // OSXでSqliteをつかうのに必要
+├── loto.fsx                    // 本体スクリプト
+├── loto.sqlite3                // データーベースファイル
+├── mizuho.fsx                  // ホームページから取得するスクリプト
+├── register.fsx                // データーベースに登録するスクリプト
+└── sqlite.fsx                  // Sqliteへの操作をまとめたスクリプト
 ```
 
 ### 実行するときは
