@@ -79,7 +79,7 @@ module Main =
     let idea04 (loto:Loto) (n:int) =
 
         /// (STEP0) データーベースに当選番号情報を登録する
-        register.Register.doRegister( match loto.kind with Loto6 -> Register.loto6 | Loto7 -> Register.loto7 )
+        // register.Register.doRegister( match loto.kind with Loto6 -> Register.loto6 | Loto7 -> Register.loto7 )
 
         /// (STEP1) 各スロットごとの数字をリストにまとめる        
         let data (loto:Loto) =

@@ -89,15 +89,11 @@ module Register =
             if loto.kind = Loto6
             then 
                 ( atariList loto (Atari loto6_head) )
-                |> List.rev
                 |> List.take short
-                |> List.rev
                 |> register db
             else 
                 ( atariList loto (Atari loto7_head) )
-                |> List.rev
                 |> List.take short
-                |> List.rev
                 |> register db
         | _ when short <= 100 ->
             if loto.kind = Loto6
@@ -105,17 +101,13 @@ module Register =
                 let body = atariList loto (Atari loto6_body |> List.rev)
                 let head = atariList loto (Atari loto6_head |> List.rev)
                 ( body @ head )
-                |> List.rev
                 |> List.take short
-                |> List.rev
                 |> register db
             else 
                 let body = atariList loto (Atari loto7_body |> List.rev)
                 let head = atariList loto (Atari loto7_head |> List.rev)
                 ( body @ head )
-                |> List.rev
                 |> List.take short
-                |> List.rev
                 |> register db
         | _ ->
             if loto.kind = Loto6
@@ -139,4 +131,5 @@ module Register =
                 |> register db
 
 
+    
 
