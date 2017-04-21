@@ -67,69 +67,73 @@ module Register =
 
         cq.ToArray()
         |> fun arr ->
-            if Array.isEmpty arr
-            then 0
-            else Array.max arr
+            if    Array.isEmpty arr
+            then  0
+            else  Array.max arr
 
-    /// 最新の抽選回数をwebから取得する関数
-    let lastID_mizuho (loto:Loto) : int =
-
-        Atari ( match loto.kind with Loto6 -> loto6_head | Loto7 -> loto7_head )
-        |> List.head
-        |> List.head
-        |> int
+    /// 最新の抽選回数をwebから取得する
+    /// 最新の当選番号群（ head ）の個数（期初だと５個にならないため）
+    let headIdLength (loto:Loto) : int * int =
+        let head = Atari ( match loto.kind with Loto6 -> loto6_head | Loto7 -> loto7_head )
+        let id   = head |> List.head |> List.head |> int
+        let len  = head |> List.length
+        ( id , len )
 
     /// 不足している当選情報リストをデーターベースに追加する
     let doRegister (loto:Loto) :unit =
-        let short = lastID_mizuho loto - lastID_sqlite db loto
-        match short with
-        | _ when short <  0   -> failwith "error!"
-        | _ when short =  0   -> ()
-        | _ when short <= 5   ->
-            if loto.kind = Loto6
-            then 
-                ( atariList loto (Atari loto6_head) )
-                |> List.take short
-                |> register db
-            else 
-                ( atariList loto (Atari loto7_head) )
-                |> List.take short
-                |> register db
-        | _ when short <= 100 ->
-            if loto.kind = Loto6
-            then 
-                let body = atariList loto (Atari loto6_body |> List.rev)
-                let head = atariList loto (Atari loto6_head |> List.rev)
-                ( body @ head )
-                |> List.take short
-                |> register db
-            else 
-                let body = atariList loto (Atari loto7_body |> List.rev)
-                let head = atariList loto (Atari loto7_head |> List.rev)
-                ( body @ head )
-                |> List.take short
-                |> register db
-        | _ ->
-            if loto.kind = Loto6
-            then          
-                let foot = atariList loto (Atari loto6_foot)
-                let body = atariList loto (Atari loto6_body |> List.rev)
-                let head = atariList loto (Atari loto6_head |> List.rev)
-                ( foot @ body @ head )
-                |> List.rev
-                |> List.take short
-                |> List.rev
-                |> register db
-            else
-                let foot = atariList loto (Atari loto7_foot)
-                let body = atariList loto (Atari loto7_body |> List.rev)
-                let head = atariList loto (Atari loto7_head |> List.rev)
-                ( foot @ body @ head )
-                |> List.rev
-                |> List.take short
-                |> List.rev
-                |> register db
 
+        let head_id_len = headIdLength loto
+        let short       = ( fst head_id_len ) - lastID_sqlite db loto
+        let len         = snd head_id_len
 
-    
-
+        if      loto.kind = Loto6
+        then
+                match short, len with
+                | s,l when s <  0 && len < 0 -> failwith "error!"
+                | s,l when s =  0            -> ()
+                | s,l when s <= 5 && l >= 5  ->
+                    ( atariList loto (Atari loto6_head) )
+                    |> List.take short
+                    |> register db
+                | s,l when s <= 100 ->
+                    let body = atariList loto (Atari loto6_body |> List.rev)
+                    let head = atariList loto (Atari loto6_head |> List.rev)
+                    ( body @ head )
+                    |> List.rev
+                    |> List.take short
+                    |> List.rev
+                    |> register db
+                | _ ->
+                    let foot = atariList loto (Atari loto6_foot)
+                    let body = atariList loto (Atari loto6_body |> List.rev)
+                    let head = atariList loto (Atari loto6_head |> List.rev)
+                    ( foot @ body @ head )
+                    |> List.rev
+                    |> List.take short
+                    |> List.rev
+                    |> register db
+        else
+                match short, len with
+                | s,l when s <  0 && len < 0 -> failwith "error!"
+                | s,l when s =  0            -> ()
+                | s,l when s <= 5 && l >= 5  ->
+                    ( atariList loto (Atari loto7_head) )
+                    |> List.take short
+                    |> register db
+                | s,l when s <= 50 ->
+                    let body = atariList loto (Atari loto7_body |> List.rev)
+                    let head = atariList loto (Atari loto7_head |> List.rev)
+                    ( body @ head )
+                    |> List.rev
+                    |> List.take short
+                    |> List.rev
+                    |> register db
+                | _ ->
+                    let foot = atariList loto (Atari loto7_foot)
+                    let body = atariList loto (Atari loto7_body |> List.rev)
+                    let head = atariList loto (Atari loto7_head |> List.rev)
+                    ( foot @ body @ head )
+                    |> List.rev
+                    |> List.take short
+                    |> List.rev
+                    |> register db
