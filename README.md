@@ -1,12 +1,11 @@
-### Summary
-```text
-ホームページからデーターを取得する
+[![MIT-LICENSE](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/callmekohei/lotofs/blob/master/LICENSE)
 
-F#からSqliteを利用する
 
-ロト６を当てる！？
-```
+# lotofs
 
+🍣 ロト６をあててお寿司を食べるためのスクリプト 
+
+ 
 ### file
 ```
 .
@@ -29,6 +28,3 @@ exeと同じ階層に libSQLite.Interop.dylib, sqliteデーターベースファ
 ### See also
 
 http://callmekohei00.hatenablog.com/entry/2017/03/19/091654
-
-### LICENCE
-The MIT License (MIT)
