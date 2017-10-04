@@ -8,7 +8,7 @@
 /// みずほ銀行のホームページから当選番号を取得するスクリプト
 
 namespace mizuho
-#r @"./packages/FSharp.Data/lib/portable-net45+sl50+netcore45/FSharp.Data.dll"
+#r @"./packages/FSharp.Data/lib/net40/FSharp.Data.dll"
 
 open FSharp.Data
 open System

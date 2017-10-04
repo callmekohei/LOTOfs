@@ -16,7 +16,7 @@ open mizuho.Mizuho
 #load @"./sqlite.fsx"
 open sqlite.Database
 
-#r @"./packages/FSharp.Data/lib/portable-net45+sl50+netcore45/FSharp.Data.dll"
+#r @"./packages/FSharp.Data/lib/net40/FSharp.Data.dll"
 
 #r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
 open System.Data.SQLite

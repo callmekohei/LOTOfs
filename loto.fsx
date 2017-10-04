@@ -16,7 +16,7 @@ open register
 #r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
 open System.Data.SQLite
 
-#r @"./packages/FSharp.Data/lib/portable-net45+sl50+netcore45/FSharp.Data.dll"
+#r @"./packages/FSharp.Data/lib/net40/FSharp.Data.dll"
 
 open System.Collections.Concurrent
 
