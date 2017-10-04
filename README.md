@@ -3,8 +3,19 @@
 
 # lotofs
 
-🍣 ロト６をあててお寿司を食べるためのスクリプト 
+ロト６、ロト７をあててお寿司を食べるためのスクリプト
 
+### Install
+```
+$ git clone https://github.com/callmekohei/lotofs
+```
+
+### How to run
+```
+$ bash build.bash
+$ mono bin_lotofs/loto.exe 
+$ mono bin_lotofs/loto.exe 7
+```
  
 ### file
 ```
@@ -18,12 +29,6 @@
 └── sqlite.fsx                  // Sqliteへの操作をまとめたスクリプト
 ```
 
-### 実行するときは
-```
-fscで実行
-
-exeと同じ階層に libSQLite.Interop.dylib, sqliteデーターベースファイルが必要
-```
 
 ### See also
 
