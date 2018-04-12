@@ -23,7 +23,7 @@ $ git clone --depth 1 https://github.com/callmekohei/lotofs
 
 下記からソースコードをダウンロード
 
-[https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki:title]
+[https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki]
 
 ```
 List of Release Packages
