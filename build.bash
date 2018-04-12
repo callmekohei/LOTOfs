@@ -9,8 +9,13 @@ SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
 # check ./libSQLite.Interop.dylib
 if [ ! -f "./libSQLite.Interop.dylib" ] ; then
-    echo 'not exist libSQLite.Interop.dylib'
-    exit
+    wget https://system.data.sqlite.org/blobs/1.0.108.0/sqlite-netFx-full-source-1.0.108.0.zip
+    mkdir foo
+    unzip sqlite-netFx-full-source-1.0.108.0.zip -d ./foo/
+    bash foo/Setup/compile-interop-assembly-release.sh
+    cp foo/bin/2013/Release/bin/libSQLite.Interop.dylib ./
+    rm -rf foo
+    rm ./sqlite-netFx-full-source-1.0.108.0.zip
 fi
 
 
@@ -88,4 +93,4 @@ if [ -n "$std_out" ] ; then
 fi
 
 # move other files to bin folder
-cp ./libSQLite.Interop.dylib ./bin_lotofs/
+mv ./libSQLite.Interop.dylib ./bin_lotofs/

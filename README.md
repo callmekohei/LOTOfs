@@ -15,48 +15,10 @@ $ git clone --depth 1 https://github.com/callmekohei/lotofs
 
 ### Prepare
 
-```
-（TODO: ビルドスクリプトにて自動化する）
-```
-
-`libSQLite.Interop.dylib`をコンパイルするして`lotofs`フォルダにコピーする
-
-下記からソースコードをダウンロード
-
-[https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki]
-
-```
-List of Release Packages
--> Source Code
--> sqlite-netFx-full-source-x.x.xxx.x.zip
-```
-
-`zip`を解凍して
-
-```bash
-$ cd Setup
-
-$ bash compile-interop-assembly-release.sh
-
-$ tree bin
-bin
-└── 2013
-    └── Release
-        └── bin
-            └── libSQLite.Interop.dylib
-```
-
-lotofsフォルダにコピー
-
-```
-lotofs [master]$ cp /path/to/libSQLite.Interop.dylib ./
-```
-
 `loto.exe`をコンパイル
 ```
 $ bash build.bash
 ```
-
 
 ### Usage
 
