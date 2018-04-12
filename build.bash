@@ -7,7 +7,7 @@
 SCRIPT_PATH='./src/loto.fsx'
 SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
-# check ./libSQLite.Interop.dylib
+# create libSQLite.Interop.dylib
 if [ ! -f "./libSQLite.Interop.dylib" ] ; then
     wget https://system.data.sqlite.org/blobs/1.0.108.0/sqlite-netFx-full-source-1.0.108.0.zip
     mkdir foo
