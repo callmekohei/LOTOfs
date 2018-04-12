@@ -1,3 +1,9 @@
+// ===========================================================================
+//  FILE    : sqlite.fsx
+//  AUTHOR  : callmekohei <callmekohei at gmail.com>
+//  License : MIT license
+// ===========================================================================
+
 namespace sqlite
 #r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
 open System.Data.SQLite
@@ -13,21 +19,19 @@ module Database =
 
     type SQ3 ( connection : System.Data.SQLite.SQLiteConnection ) =
 
-        let cn = connection
-
         member this.sqlite_open : unit =
-            cn.Open()
+            connection.Open()
 
         member this.sqlite_close : unit =
-            cn.Close()
+            connection.Close()
 
         member this.sqlite_createTable sql  =
-            ( new SQLiteCommand(sql, cn)).ExecuteNonQuery() |> ignore
+            ( new SQLiteCommand(sql, connection)).ExecuteNonQuery() |> ignore
 
         member this.sqlite_insert  sql =
-            ( new SQLiteCommand(sql, cn)).ExecuteNonQuery() |> ignore
+            ( new SQLiteCommand(sql, connection)).ExecuteNonQuery() |> ignore
 
         member this.sqlite_select  sql f =
-            let reader = ( new SQLiteCommand(sql, cn )).ExecuteReader()
+            let reader = ( new SQLiteCommand(sql, connection )).ExecuteReader()
             while ( reader.Read() ) do
                f reader
