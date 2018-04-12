@@ -6,7 +6,7 @@ open System.Runtime.InteropServices
 module Database =
 
     /// Path to libSQLite.Interop.dylib
-    [<DllImport(@"./libSQLite.Interop.dylib" , CallingConvention = CallingConvention.Cdecl)>] 
+    [<DllImport(@"./libSQLite.Interop.dylib" , CallingConvention = CallingConvention.Cdecl)>]
     let sqlite_connection : System.Data.SQLite.SQLiteConnection  =
         /// Path to sqlite3
         ( new SQLiteConnection( @"Data Source=./loto.sqlite3;Version=3;foreign keys=true" ))
@@ -17,7 +17,7 @@ module Database =
 
         member this.sqlite_open : unit =
             cn.Open()
-        
+
         member this.sqlite_close : unit =
             cn.Close()
 
@@ -30,4 +30,4 @@ module Database =
         member this.sqlite_select  sql f =
             let reader = ( new SQLiteCommand(sql, cn )).ExecuteReader()
             while ( reader.Read() ) do
-               f reader 
+               f reader

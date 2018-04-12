@@ -16,7 +16,7 @@ open mizuho.Mizuho
 #load @"./sqlite.fsx"
 open sqlite.Database
 
-#r @"./packages/FSharp.Data/lib/net40/FSharp.Data.dll"
+#r @"./packages/FSharp.Data/lib/net45/FSharp.Data.dll"
 
 #r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
 open System.Data.SQLite
@@ -30,13 +30,13 @@ module Register =
     let  loto6 = { number = 6 ; lst = [1..43] ; kind = Loto6 }
     let  loto7 = { number = 7 ; lst = [1..37] ; kind = Loto7 }
 
-    let db:SQ3 = sqlite.Database.SQ3( sqlite_connection ) 
+    let db:SQ3 = sqlite.Database.SQ3( sqlite_connection )
 
-    /// データーベースに登録するための当選情報の文字列を作成する関数 
+    /// データーベースに登録するための当選情報の文字列を作成する関数
     let atariList (loto:Loto) atariData  : string list =
 
         let str = match loto.kind with
-                    | Loto6 -> @"INSERT INTO loto6 ( id, date, n1, n2, n3, n4, n5, n6 )     VALUES (" 
+                    | Loto6 -> @"INSERT INTO loto6 ( id, date, n1, n2, n3, n4, n5, n6 )     VALUES ("
                     | Loto7 -> @"INSERT INTO loto7 ( id, date, n1, n2, n3, n4, n5, n6, n7 ) VALUES ("
 
         atariData
@@ -58,12 +58,12 @@ module Register =
                     | Loto6 -> @"SELECT id FROM loto6"
                     | Loto7 -> @"SELECT id FROM loto7"
 
-        let f = fun (r:SQLiteDataReader) -> 
+        let f = fun (r:SQLiteDataReader) ->
             cq.Enqueue ( r.GetInt32(0) ) |> ignore
 
         db.sqlite_open
         db.sqlite_select str f
-        db.sqlite_close 
+        db.sqlite_close
 
         cq.ToArray()
         |> fun arr ->
@@ -104,10 +104,11 @@ module Register =
                     |> List.rev
                     |> register db
                 | _ ->
-                    let foot = atariList loto (Atari loto6_foot)
+                    let foot_old = atariList loto (Atari loto6_foot_old)
+                    let foot_new = atariList loto (Atari loto6_foot_new)
                     let body = atariList loto (Atari loto6_body |> List.rev)
                     let head = atariList loto (Atari loto6_head |> List.rev)
-                    ( foot @ body @ head )
+                    ( foot_old @ foot_new @ body @ head )
                     |> List.rev
                     |> List.take short
                     |> List.rev

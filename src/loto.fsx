@@ -6,6 +6,7 @@
 
 /// 当たるも八卦当たらぬも八卦
 
+#r @"./packages/Selenium.WebDriver/lib/net45/WebDriver.dll"
 
 #load @"./sqlite.fsx"
 open sqlite.Database
@@ -16,7 +17,7 @@ open register
 #r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
 open System.Data.SQLite
 
-#r @"./packages/FSharp.Data/lib/net40/FSharp.Data.dll"
+#r @"./packages/FSharp.Data/lib/net45/FSharp.Data.dll"
 
 open System.Collections.Concurrent
 
@@ -75,26 +76,26 @@ module Util =
 
 module Main =
     open Util
-    
+
     let idea04 (loto:Loto) (n:int) =
 
         /// (STEP0) データーベースに当選番号情報を登録する
         register.Register.doRegister( match loto.kind with Loto6 -> Register.loto6 | Loto7 -> Register.loto7 )
 
-        /// (STEP1) 各スロットごとの数字をリストにまとめる        
+        /// (STEP1) 各スロットごとの数字をリストにまとめる
         let data (loto:Loto) =
-            
+
             let col = match loto.kind with Loto6 -> [2..7] | Loto7 -> [2..8]
             let s   = match loto.kind with Loto6 -> @"SELECT * FROM loto6" | Loto7 -> @"SELECT * FROM loto7"
 
             let cq = new ConcurrentQueue<int list>()
 
-            let f col = fun (r:SQLiteDataReader) -> 
+            let f col = fun (r:SQLiteDataReader) ->
                 col
                 |> List.map( fun n -> r.GetInt32(n) )
                 |> fun l -> cq.Enqueue l
                 |> ignore
-            
+
             let db = register.Register.db
             db.sqlite_open
             db.sqlite_select s (f col)
@@ -115,7 +116,7 @@ module Main =
         let v:Loto = if    Array.isEmpty argv || argv.[0] <> "7"
                      then  loto6
                      else  loto7
-        
+
         idea04 v 5
         |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
         |> stdout.WriteLine

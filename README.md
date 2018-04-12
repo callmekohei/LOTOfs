@@ -5,28 +5,81 @@
 
 ロト６、ロト７をあててお寿司を食べるためのスクリプト
 
+### Target
+OSX
+
 ### Install
 ```
-$ git clone https://github.com/callmekohei/lotofs
+$ git clone --depth 1 https://github.com/callmekohei/lotofs
 ```
 
-### How to run
+### Prepare
+
+```
+（TODO: ビルドスクリプトにて自動化する）
+```
+
+`libSQLite.Interop.dylib`をコンパイルするして`lotofs`フォルダにコピーする
+
+下記からソースコードをダウンロード
+
+[https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki:title]
+
+```
+List of Release Packages
+-> Source Code
+-> sqlite-netFx-full-source-x.x.xxx.x.zip
+```
+
+`zip`を解凍して
+
+```bash
+$ cd Setup
+
+$ bash compile-interop-assembly-release.sh
+
+$ tree bin
+bin
+└── 2013
+    └── Release
+        └── bin
+            └── libSQLite.Interop.dylib
+```
+
+lotofsフォルダにコピー
+
+```
+lotofs [master]$ cp /path/to/libSQLite.Interop.dylib ./
+```
+
+`loto.exe`をコンパイル
 ```
 $ bash build.bash
-$ mono bin_lotofs/loto.exe 
-$ mono bin_lotofs/loto.exe 7
+```
+
+
+### Usage
+
+```
+// 実行ファイルがあるフォルダに移動
+$ cd bin_lotofs
+
+// ロト６の予想（初回は時間がかかります）
+$ mono loto.exe 
+
+// ロト７の予想（初回は時間がかかります）
+$ mono loto.exe 7
 ```
  
-### file
+### Files
 ```
 .
-├── README.md                   // このファイル
-├── libSQLite.Interop.dylib     // OSXでSqliteをつかうのに必要
-├── loto.fsx                    // 本体スクリプト
-├── loto.sqlite3                // データーベースファイル
-├── mizuho.fsx                  // ホームページから取得するスクリプト
-├── register.fsx                // データーベースに登録するスクリプト
-└── sqlite.fsx                  // Sqliteへの操作をまとめたスクリプト
+├── README.md           // このファイル
+└── src                 // コードが格納されているフォルダ
+    ├── loto.fsx        // 本体スクリプト
+    ├── mizuho.fsx      // ホームページから出目を取得するスクリプト
+    ├── register.fsx    // データーベースに出目を登録するスクリプト
+    └── sqlite.fsx      // sqlite3への操作をまとめたスクリプト
 ```
 
 

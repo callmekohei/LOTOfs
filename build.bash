@@ -1,33 +1,34 @@
 # ===========================================================================
-#  FILE    : easyCompile.bash
+#  FILE    : build.bash
 #  AUTHOR  : callmekohei <callmekohei at gmail.com>
 #  License : MIT license
 # ===========================================================================
 
-
-# Please fit your path if you need.
-mono=''
-fsc=''
-
-# mono .paket/paket.bootstrapper.exe
-mono .paket/paket.exe install
-
-SCRIPT_PATH='./loto.fsx'
+SCRIPT_PATH='./src/loto.fsx'
 SCRIPT_DIR=$(cd $(dirname $0);pwd)
 
-
-# Create EXE file
-declare -a arr=(
-   '--nologo'
-   '--simpleresolution'
-    $SCRIPT_PATH
-)
-
-if [ "$mono" = "" ] || [ "$fsc" = "" ] ; then
-    fsharpc ${arr[@]}
-else
-    $mono $fsc --exename:$(basename "$0") ${arr[@]}
+# check ./libSQLite.Interop.dylib
+if [ ! -f "./libSQLite.Interop.dylib" ] ; then
+    echo 'not exist libSQLite.Interop.dylib'
+    exit
 fi
+
+
+# initial install library
+foo="
+    source https://www.nuget.org/api/v2
+    nuget System.Data.SQLite
+    nuget fsharp.data == 3.0.0-beta3
+    nuget Selenium.webdriver
+    nuget Selenium.Support
+"
+
+if [ ! -e ./packages ] ; then
+    paket init
+    echo "$foo" > paket.dependencies
+    paket install
+fi
+
 
 # Create bin folder
 if [ -e ./bin_lotofs ] ; then
@@ -37,9 +38,25 @@ fi
 mkdir ./bin_lotofs
 
 
-# EXE file -> ./bin folder (move)
-EXE_PATH=${SCRIPT_PATH%.fsx}.exe
-mv $EXE_PATH ./bin_lotofs
+# Create EXE file
+declare -a arr=(
+   '--nologo'
+   '--simpleresolution'
+   # '-g'
+   # '--optimize-'
+    $SCRIPT_PATH
+    --out:./bin_lotofs/loto.exe
+)
+
+fsharpc ${arr[@]}
+
+
+# create database file ( sqlite3 file )
+foo='create table loto6 ( id int primary key, date text , n1 int, n2 int, n3 int, n4 int, n5 int, n6 int )'
+bar='create table loto7 ( id int primary key, date text , n1 int, n2 int, n3 int, n4 int, n5 int, n6 int, n7 int)'
+touch ./bin_lotofs/loto.sqlite3
+echo $foo | sqlite3 ./bin_lotofs/loto.sqlite3
+echo $bar | sqlite3 ./bin_lotofs/loto.sqlite3
 
 
 # Get path of DLL from FSharp script
@@ -72,4 +89,3 @@ fi
 
 # move other files to bin folder
 cp ./libSQLite.Interop.dylib ./bin_lotofs/
-cp ./loto.sqlite3 ./bin_lotofs/
