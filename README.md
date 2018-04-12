@@ -44,6 +44,13 @@ $ mono loto.exe 7
     └── sqlite.fsx      // sqlite3への操作をまとめたスクリプト
 ```
 
+### Shortcut
+`.bash_profile`に登録すると便利
+```bash
+alias loto6="cd /path/to/lotofs/bin_lotofs/ ; mono loto.exe   ; cd -"
+alias loto7="cd /path/to/lotofs/bin_lotofs/ ; mono loto.exe 7 ; cd -"
+```
+
 
 ### See also
 
