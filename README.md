@@ -9,28 +9,26 @@
 OSX
 
 ### Install
+
+`lotofs` は `mono` と `paket` が必要
+
 ```
 $ git clone --depth 1 https://github.com/callmekohei/lotofs
-```
-
-### Prepare
-
-`loto.exe`をコンパイル
-```
-$ bash build.bash
+$ cd lotofs/
+$ bash init.bash
 ```
 
 ### Usage
 
 ```
 // 実行ファイルがあるフォルダに移動
-$ cd bin_lotofs
+$ cd src/
 
 // ロト６の予想（初回は時間がかかります）
-$ mono loto.exe 
+$ fsharpi loto.fsx 
 
 // ロト７の予想（初回は時間がかかります）
-$ mono loto.exe 7
+$ fsharpi loto.fsx 7
 ```
  
 ### Files
@@ -45,12 +43,13 @@ $ mono loto.exe 7
 ```
 
 ### Shortcut
-`.bash_profile`に登録すると便利
-```bash
-alias loto6="cd /path/to/lotofs/bin_lotofs/ ; mono loto.exe   ; cd -"
-alias loto7="cd /path/to/lotofs/bin_lotofs/ ; mono loto.exe 7 ; cd -"
-```
 
+`.bash_profile`に登録すると便利
+
+```bash
+alias loto6="cd /Users/callmekohei/tmp/lotofs/src/ ; fsharpi loto.fsx   ; cd -"
+alias loto7="cd /Users/callmekohei/tmp/lotofs/src/ ; fsharpi loto.fsx 7 ; cd -"
+```
 
 ### See also
 

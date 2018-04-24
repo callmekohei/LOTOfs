@@ -6,19 +6,13 @@
 
 /// 当たるも八卦当たらぬも八卦
 
-#r @"./packages/Selenium.WebDriver/lib/net45/WebDriver.dll"
-
 #load @"./sqlite.fsx"
-open sqlite.Database
-
 #load @"./register.fsx"
+open sqlite.Database
 open register
 
-#r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
+#load "../.paket/load/net471/main.group.fsx"
 open System.Data.SQLite
-
-#r @"./packages/FSharp.Data/lib/net45/FSharp.Data.dll"
-
 open System.Collections.Concurrent
 
 module Util =
@@ -111,14 +105,16 @@ module Main =
         |> Seq.take n
 
 
-    [<EntryPointAttribute>]
-    let main argv =
-        let v:Loto = if    Array.isEmpty argv || argv.[0] <> "7"
-                     then  loto6
-                     else  loto7
+    let argv = fsi.CommandLineArgs
 
-        idea04 v 5
-        |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
-        |> stdout.WriteLine
+    let v:Loto =
+        if Array.length argv = 1 then
+            loto6
+        elif argv.[1] = "7" then
+            loto7
+        else
+            loto6
 
-        0
+    idea04 v 5
+    |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
+    |> stdout.WriteLine

@@ -6,10 +6,11 @@
 !src/sqlite.fsx
 !paket.dependencies
 !paket.lock
-!build.bash
+!init.bash
 
 .paket/
-bin_lotofs/
+src/libSQLite.Interop.dylib
+src/loto.sqlite3
 libSQLite.Interop.dylib
 packages/
 paket-files/

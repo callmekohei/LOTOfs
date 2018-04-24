@@ -11,14 +11,11 @@ namespace register
 
 
 #load @"./mizuho.fsx"
-open mizuho.Mizuho
-
 #load @"./sqlite.fsx"
+open mizuho.Mizuho
 open sqlite.Database
 
-#r @"./packages/FSharp.Data/lib/net45/FSharp.Data.dll"
-
-#r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
+#load "../.paket/load/net471/main.group.fsx"
 open System.Data.SQLite
 
 open System.Collections.Concurrent

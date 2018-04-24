@@ -5,7 +5,7 @@
 // ===========================================================================
 
 namespace sqlite
-#r @"./packages/System.Data.SQLite.Core/lib/net46/System.Data.SQLite.dll"
+#load "../.paket/load/net471/main.group.fsx"
 open System.Data.SQLite
 open System.Runtime.InteropServices
 
@@ -35,3 +35,4 @@ module Database =
             let reader = ( new SQLiteCommand(sql, connection )).ExecuteReader()
             while ( reader.Read() ) do
                f reader
+

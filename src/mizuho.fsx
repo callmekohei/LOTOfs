@@ -8,11 +8,8 @@
 
 namespace mizuho
 
-#r @"./packages/FSharp.Data/lib/net45/FSharp.Data.dll"
+#load "../.paket/load/net471/main.group.fsx"
 open FSharp.Data
-
-#r "./packages/Selenium.WebDriver/lib/net45/WebDriver.dll"
-#r "./packages/Selenium.Support/lib/net45/WebDriver.Support.dll"
 open OpenQA.Selenium
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium.Support.UI
