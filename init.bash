@@ -18,17 +18,17 @@ fi
 # initial install library
 if [ ! -e ./packages ] ; then
 
-    foo="
-        source https://www.nuget.org/api/v2
-        generate_load_scripts: true
-        nuget System.Data.SQLite
-        nuget fsharp.data == 3.0.0-beta3
-        nuget Selenium.webdriver
-        nuget Selenium.Support
-    "
-
-    paket init
-    echo "$foo" > paket.dependencies
+    # foo="
+    #     source https://www.nuget.org/api/v2
+    #     generate_load_scripts: true
+    #     nuget System.Data.SQLite
+    #     nuget fsharp.data == 3.0.0-beta3
+    #     nuget Selenium.webdriver
+    #     nuget Selenium.Support
+    # "
+    #
+    # paket init
+    # echo "$foo" > paket.dependencies
     paket install
 
 fi
