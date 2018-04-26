@@ -65,12 +65,6 @@ module Util =
         |> List.map (sprintf "%02d")
         |> String.concat separater
 
-
-
-
-module Main =
-    open Util
-
     let idea04 (loto:Loto) (n:int) =
 
         /// (STEP0) データーベースに当選番号情報を登録する
@@ -103,18 +97,3 @@ module Main =
         |> Seq.filter (fun l -> toZone loto l = zone )
         |> Seq.distinct
         |> Seq.take n
-
-
-    let argv = fsi.CommandLineArgs
-
-    let v:Loto =
-        if Array.length argv = 1 then
-            loto6
-        elif argv.[1] = "7" then
-            loto7
-        else
-            loto6
-
-    idea04 v 5
-    |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
-    |> stdout.WriteLine
