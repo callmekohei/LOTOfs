@@ -15,6 +15,8 @@ open register
 open System.Data.SQLite
 open System.Collections.Concurrent
 
+open System
+
 module Util =
 
     type LOTO  = Loto6 | Loto7
@@ -64,6 +66,110 @@ module Util =
         lst
         |> List.map (sprintf "%02d")
         |> String.concat separater
+
+    // https://www.rosettacode.org/wiki/Knuth_shuffle
+    let FisherYatesShuffle (initialList:seq<_>) =
+
+        let initialArray = initialList |> Seq.toArray
+        let availableFlags = Array.init (Seq.length initialList) (fun i -> (i, true))
+        let rnd = new Random()
+
+        let nextItem nLeft =
+            let nItem = rnd.Next(0, nLeft)
+            let index =
+                availableFlags
+                |> Seq.filter (fun (ndx,f) -> f)
+                |> Seq.item nItem
+                |> fst
+            availableFlags.[index] <- (index, false)
+            initialArray.[index]
+
+        seq {(Seq.length initialList) .. -1 .. 1}
+        |> Seq.map (fun i -> nextItem i)
+
+
+    let idea01 (loto:Loto) (n:int) =
+
+        let shuffle lst n =
+            lst
+            |> FisherYatesShuffle
+            |> Seq.take n
+            |> Seq.sort
+            |> Seq.toList
+
+        Seq.initInfinite( fun _ -> shuffle loto.lst loto.number )
+        |> Seq.distinct
+        |> Seq.take n
+
+    let idea02 (loto:Loto) (n:int) =
+
+        let shuffle2 lst n =
+
+            let evenList =
+                lst
+                |> List.filter ( fun n -> n % 2 = 0 )
+                |> FisherYatesShuffle
+                |> Seq.take n
+                |> Seq.toList
+
+            let oddList =
+                lst
+                |> List.filter ( fun n -> n % 2 <> 0 )
+                |> FisherYatesShuffle
+                |> Seq.take n
+                |> Seq.toList
+
+            evenList @ oddList
+            |> FisherYatesShuffle
+            |> Seq.take n
+            |> Seq.sort
+            |> Seq.toList
+
+        Seq.initInfinite( fun _ -> shuffle2 loto.lst loto.number )
+        |> Seq.distinct
+        |> Seq.take n
+
+    let idea03 (loto:Loto) (n:int) =
+
+        let rec quickPick (loto:Loto) =
+
+            let asign (lst:list<int>) =
+                let lst1 = lst |> List.filter (fun n -> n <= 13)
+                let lst2 = lst |> List.filter (fun n -> n > 13 && n <= 28)
+                let lst3 = lst |> List.filter (fun n -> n > 28)
+                (lst1, lst2, lst3)
+
+            let createHits (a,b,c) =
+                let zone1 =  a |> Set.ofSeq |> Set.difference ( Set [1.. 13] )
+                let zone2 =  b |> Set.ofSeq |> Set.difference ( Set [14..28] )
+                let zone3 =  c |> Set.ofSeq |> Set.difference ( Set [29..42] )
+                [zone1;zone2;zone3]
+                |> List.map ( fun st -> Set.toList st )
+                |> List.map ( FisherYatesShuffle )
+                |> List.map ( Seq.toList )
+
+            let Hits =
+                loto.lst
+                |> FisherYatesShuffle |> Seq.take 20 |> Seq.sort |> Seq.toList
+                |> asign
+                |> createHits
+
+            let Zone = createZone loto
+
+            let flg =
+                let len  = Hits |> List.map List.length
+                let diff = List.map2 (fun a b -> a - b ) len Zone
+                diff |> List.tryFind ( fun n -> n < 0 )
+
+            match flg with
+            | Some _ -> quickPick loto
+            | None   -> List.map2 List.take Zone Hits
+                        |> List.concat
+                        |> List.sort
+
+        Seq.initInfinite( fun _ -> quickPick loto )
+        |> Seq.distinct
+        |> Seq.take n
 
     let idea04 (loto:Loto) (n:int) =
 

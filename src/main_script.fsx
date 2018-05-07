@@ -17,8 +17,19 @@ let v:Loto =
     else
         loto6
 
-idea04 v 5
+idea04 v 1
 |> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
-|> stdout.WriteLine
+|> stdout.Write
 
+idea01 v 1
+|> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
+|> stdout.Write
+
+idea02 v 1
+|> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
+|> stdout.Write
+
+idea03 v 1
+|> Seq.fold ( fun acc l -> prettyPrint " " l + "\n" + acc ) ""
+|> stdout.Write
 
