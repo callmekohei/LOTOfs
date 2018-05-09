@@ -23,9 +23,41 @@ create_dylib() (
     fi
 )
 
+# see also
+# Getting Started with Paket > Manual setup
+# https://fsprojects.github.io/Paket/getting-started.html#Manual-setup
+function download_paket_bootstrapper(){
+    curl -i "https://api.github.com/repos/fsprojects/Paket/releases" \
+        | jq '.[]' \
+        | jq '.[0].assets[].browser_download_url' \
+        | grep 'paket.bootstrapper.exe' \
+        | xargs wget -P .paket
+
+    mv .paket/paket.bootstrapper.exe .paket/paket.exe
+}
+
 install_lib() (
-    if [ ! -e ./packages ] ; then
-        paket install
+
+    local foo="
+        source https://www.nuget.org/api/v2
+        generate_load_scripts: true
+        nuget System.Data.SQLite
+        nuget fsharp.data == 3.0.0-beta3
+        nuget Selenium.webdriver
+        nuget Selenium.Support
+    "
+
+    if [ -z $(which paket) ] ; then
+        download_paket_bootstrapper
+        mono ./.paket/paket.exe init
+        echo "$foo" > ./paket.dependencies
+        mono ./.paket/paket.exe install
+    else
+        if [ ! -f ./packages/ ] ; then
+            paket init
+            echo "$foo" > ./paket.dependencies
+            paket install
+        fi
     fi
 )
 
