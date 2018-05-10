@@ -47,7 +47,13 @@ install_lib() (
         nuget Selenium.Support
     "
 
-    if [ -z $(which paket) ] ; then
+    if [ ! $(type -t jq) ] ; then
+        echo 'Please install jq'
+        return -1
+        exit
+    fi
+
+    if [ ! $(type -t paket) ] ; then
         download_paket_bootstrapper
         mono ./.paket/paket.exe init
         echo "$foo" > ./paket.dependencies
@@ -108,10 +114,13 @@ else
     mkdir ./bin
     create_dylib
     install_lib
-    create_db
-    create_exe_file
-    cat $Lib_PATH | arrange_text | copy_dll_to_bin_folder
-fi
+    if [ $? = 0 ]; then
+        create_db
+        create_exe_file
+        cat $Lib_PATH | arrange_text | copy_dll_to_bin_folder
+    fi
+
+# fi
 
 
 
