@@ -16,6 +16,26 @@ create_dylib() (
     fi
 )
 
+# see also
+# Getting Started with Paket > Manual setup
+# https://fsprojects.github.io/Paket/getting-started.html#Manual-setup
+function download_paket_bootstrapper(){
+
+    if [ ! $(type -t jq) ] ; then
+        echo 'Please install jq'
+        return -1
+        exit
+    fi
+
+    curl -i "https://api.github.com/repos/fsprojects/Paket/releases" \
+        | jq '.[]' \
+        | jq '.[0].assets[].browser_download_url' \
+        | grep 'paket.bootstrapper.exe' \
+        | xargs wget -P .paket
+
+    mv .paket/paket.bootstrapper.exe .paket/paket.exe
+}
+
 install_lib() (
 
     local foo="
@@ -26,12 +46,6 @@ install_lib() (
         nuget Selenium.webdriver
         nuget Selenium.Support
     "
-
-    if [ ! $(type -t jq) ] ; then
-        echo 'Please install jq'
-        return -1
-        exit
-    fi
 
     if [ ! $(type -t paket) ] ; then
         download_paket_bootstrapper
