@@ -28,7 +28,7 @@ create_dylib() (
 # https://fsprojects.github.io/Paket/getting-started.html#Manual-setup
 function download_paket_bootstrapper(){
 
-    if [ ! $(type -t jq) ] ; then
+    if ! type jq >/dev/null 2&>1 ; then
         echo 'Please install jq'
         return -1
         exit
@@ -54,7 +54,7 @@ install_lib() (
         nuget Selenium.Support
     "
 
-    if [ ! $(type -t paket) ] ; then
+    if ! type paket >/dev/null 2&>1 ; then
         download_paket_bootstrapper
         mono ./.paket/paket.exe init
         echo "$foo" > ./paket.dependencies
