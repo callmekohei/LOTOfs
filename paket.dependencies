@@ -1,6 +1,6 @@
 
-        source https://www.nuget.org/api/v2
         generate_load_scripts: true
+        source https://www.nuget.org/api/v2
         nuget System.Data.SQLite
         nuget fsharp.data == 3.0.0-beta3
         nuget Selenium.webdriver
