@@ -11,10 +11,10 @@ OSX
 
 ## Requires
 
-Firefox  
-[mono](https://github.com/mono/mono)  
-[fsharp](https://github.com/fsharp/fsharp)  
-[paket](https://github.com/fsprojects/Paket)
+Firefox
+, [mono](https://github.com/mono/mono)
+, [fsharp](https://github.com/fsharp/fsharp)
+and [paket](https://github.com/fsprojects/Paket)
 
 
 ## Install
@@ -27,7 +27,6 @@ $ bash build.bash
 
 ## Usage
 
-binary version
 ```shell
 $ cd bin/
 $ mono main_binary.exe
@@ -36,7 +35,6 @@ $ mono main_binary.exe 7
 
 ## Shortcut
 
-binary version
 ```bash
 # bash_profile
 alias loto6="cd /Users/callmekohei/tmp/lotofs/bin/ ; mono main_binary.exe   ; cd -"
