@@ -18,7 +18,6 @@ create_dylib() (
         unzip sqlite-netFx-full-source-1.0.108.0.zip -d ./foo/
         bash foo/Setup/compile-interop-assembly-release.sh
         cp -f foo/bin/2013/Release/bin/libSQLite.Interop.dylib ./bin/
-        cp -f foo/bin/2013/Release/bin/libSQLite.Interop.dylib ./src/
         rm -rf ./foo/
         rm ./sqlite-netFx-full-source-1.0.108.0.zip
     fi
@@ -75,14 +74,10 @@ create_db() (
 
     touch ./loto.sqlite3
     cp -f ./loto.sqlite3 ./bin/
-    cp -f ./loto.sqlite3 ./src/
     rm ./loto.sqlite3
 
     echo "${foo}" | sqlite3 ./bin/loto.sqlite3
     echo "${bar}" | sqlite3 ./bin/loto.sqlite3
-
-    echo "${foo}" | sqlite3 ./src/loto.sqlite3
-    echo "${bar}" | sqlite3 ./src/loto.sqlite3
 )
 
 create_exe_file() (

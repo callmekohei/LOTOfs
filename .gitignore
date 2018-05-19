@@ -1,7 +1,6 @@
 !.gitignore
 !README.md
 !src/main_binary.fsx
-!src/main_script.fsx
 !src/loto.fsx
 !src/mizuho.fsx
 !src/register.fsx
