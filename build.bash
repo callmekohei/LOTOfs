@@ -10,7 +10,7 @@ FSX_PATH=./src/main_binary.fsx
 Lib_PATH=./.paket/load/net471/main.group.fsx
 
 
-create_dylib() {
+function create_dylib() {
     if [ ! -f "./bin/libSQLite.Interop.dylib" ] ; then
         wget https://system.data.sqlite.org/blobs/1.0.108.0/sqlite-netFx-full-source-1.0.108.0.zip
         mkdir ./foo/
@@ -25,7 +25,7 @@ create_dylib() {
 # see also
 # Getting Started with Paket > Manual setup
 # https://fsprojects.github.io/Paket/getting-started.html#Manual-setup
-download_paket_bootstrapper () {
+function download_paket_bootstrapper () {
 
     if ! type jq >/dev/null 2>&1 ; then
         echo 'Please install jq'
@@ -42,7 +42,7 @@ download_paket_bootstrapper () {
     mv .paket/paket.bootstrapper.exe .paket/paket.exe
 }
 
-install_lib () {
+function install_lib () {
 
     local foo="
         generate_load_scripts: true
@@ -67,7 +67,7 @@ install_lib () {
     fi
 }
 
-create_db () {
+function create_db () {
     local foo='create table loto6 ( id int primary key, date text , n1 int, n2 int, n3 int, n4 int, n5 int, n6 int )'
     local bar='create table loto7 ( id int primary key, date text , n1 int, n2 int, n3 int, n4 int, n5 int, n6 int, n7 int)'
 
@@ -79,7 +79,7 @@ create_db () {
     echo "${bar}" | sqlite3 ./bin/loto.sqlite3
 }
 
-create_exe_file () {
+function create_exe_file () {
     declare -a local arr=(
         "${FSX_PATH}"
         --nologo
@@ -89,7 +89,7 @@ create_exe_file () {
     fsharpc "${arr[@]}"
 }
 
-arrange_text () {
+function arrange_text () {
     local line
     while read -r line
     do
@@ -101,7 +101,7 @@ arrange_text () {
     done
 }
 
-copy_dll_to_bin_folder () {
+function copy_dll_to_bin_folder () {
     local line
     while read -r line
     do
