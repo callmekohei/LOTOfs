@@ -1,10 +1,9 @@
+#!/usr/bin/env bash
 # ===========================================================================
 #  FILE    : build.bash
 #  AUTHOR  : callmekohei <callmekohei at gmail.com>
 #  License : MIT license
 # ===========================================================================
-
-#!/bin/bash
 
 # fit your file path
 FSX_PATH=./src/main_binary.fsx
