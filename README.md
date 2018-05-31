@@ -58,10 +58,10 @@ sys	0m1.656s
 
 ## Shortcut
 
-Put it on `bash_profile`
+Put it on `bashrc`
 ```bash
-alias loto6="cd /Users/callmekohei/tmp/lotofs/bin/ ; mono main_binary.exe   ; cd -"
-alias loto7="cd /Users/callmekohei/tmp/lotofs/bin/ ; mono main_binary.exe 7 ; cd -"
+alias loto6="( cd /Users/callmekohei/tmp/lotofs/bin/ ; mono main_binary.exe   )"
+alias loto7="( cd /Users/callmekohei/tmp/lotofs/bin/ ; mono main_binary.exe 7 )"
 ```
 
 ## Files
