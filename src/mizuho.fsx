@@ -280,14 +280,10 @@ module public Mizuho =
 (*
     jikken
 *)
-
-    // Atari loto6_body
-
     // Atari loto6_head |> printfn "%A"
     // Atari loto6_body |> printfn "%A"
     // Atari loto6_foot_new |> printfn "%A"
     // Atari loto6_foot_old |> printfn "%A"
-
     // Atari loto7_head |> printfn "%A"
     // Atari loto7_body |> printfn "%A"
     // Atari loto7_foot |> printfn "%A"
