@@ -12,13 +12,13 @@ Lib_PATH=./.paket/load/net471/main.group.fsx
 
 function create_dylib() {
     if [ ! -f "./bin/libSQLite.Interop.dylib" ] ; then
-        wget https://system.data.sqlite.org/blobs/1.0.108.0/sqlite-netFx-full-source-1.0.108.0.zip
+        wget https://system.data.sqlite.org/blobs/1.0.111.0/sqlite-netFx-full-source-1.0.111.0.zip
         mkdir ./foo/
-        unzip sqlite-netFx-full-source-1.0.108.0.zip -d ./foo/
+        unzip sqlite-netFx-full-source-1.0.111.0.zip -d ./foo/
         bash foo/Setup/compile-interop-assembly-release.sh
         cp -f foo/bin/2013/Release/bin/libSQLite.Interop.dylib ./bin/
         rm -rf ./foo/
-        rm ./sqlite-netFx-full-source-1.0.108.0.zip
+        rm ./sqlite-netFx-full-source-1.0.111.0.zip
     fi
 }
 
